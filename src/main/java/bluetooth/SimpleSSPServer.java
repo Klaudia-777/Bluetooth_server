@@ -46,20 +46,21 @@ public class SimpleSSPServer {
         System.out.println("Remote device name: " + dev.getFriendlyName(true));
 
 
-
         //read string from spp client
         InputStream inStream = connection.openInputStream();
         BufferedReader bReader = new BufferedReader(new InputStreamReader(inStream));
-        if(true){
+        if (true) {
             while (true) {
                 try {
                     String lineRead = bReader.readLine();
-                    if(lineRead!=null){
-                        System.out.println(lineRead);
-                        lineRead = lineRead.replaceAll(",",".");
-                        int width = Double.valueOf(lineRead.split(";")[0]).intValue();
-                        int height = Double.valueOf(lineRead.split(";")[1]).intValue();
-                        service.moveMouse(new Point(width, height));
+                    if (lineRead != null && !lineRead.equals("")) {
+                        lineRead = lineRead.replaceAll(",", ".");
+                        double distance = Double.valueOf(lineRead.split(";")[4]) * 3780 ;
+                        Double width = Double.valueOf(lineRead.split(";")[0]) * distance;
+                        Double height = Double.valueOf(lineRead.split(";")[2]) * distance;
+                        System.out.println(width + ", " + height);
+
+                        service.moveMouse(new Point(width.intValue(), height.intValue()));
                     }
                 } catch (NullPointerException npe) {
 
